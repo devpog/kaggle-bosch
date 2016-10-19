@@ -6,6 +6,23 @@
 import os
 import re
 
+db = 'bosch'
+table = 'train_numeric'
+table_temp = 'train_numeric_temp'
+
+# Step 1. Create a temp table
+create_table_temp = """
+hive -e "create table {0}.{1} (col_value STRING)"
+""".strip().format(db, table_temp)
+os.system(create_table_temp);
+
+# Step 2. Load data into temp table
+load_data_temp = """
+hive -e "LOAD DATA INPATH '/user/hdfs/{0}/{1}.csv' OVERWRITE INTO TABLE {0}.{2}"
+""".strip().format(db, table, table_temp)
+os.system(load_data_temp)
+
+# Step 3.
 work_dir = os.getcwd()
 input_dir = '/'.join(work_dir.split('/')[:-1]) + '/input/'
 f = [e for e in os.listdir(input_dir) if re.match('^train_numeric\.csv$', e)].pop()

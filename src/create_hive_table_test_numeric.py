@@ -34,14 +34,13 @@ if step2:
     os.system(load_data_temp)
 
 # Step 3. Create permanent table
-
 work_dir = os.getcwd()
 input_dir = '/'.join(work_dir.split('/')[:-1]) + '/input/'
-f = [e for e in os.listdir(input_dir) if re.match('^train_numeric\.csv$', e)].pop()
-h = [e for e in os.listdir(input_dir) if re.match('^train_numeric_header\.csv$', e)].pop()
+f = [e for e in os.listdir(input_dir) if re.match('^test_numeric\.csv$', e)].pop()
+h = [e for e in os.listdir(input_dir) if re.match('^test_numeric_header\.csv$', e)].pop()
 cols = open(input_dir + h).read().split(',')
 
-header = "create table bosch.train_numeric ("
+header = "create table bosch.test_numeric ("
 for n, c in enumerate(cols):
 
     if c == 'Id':
@@ -62,11 +61,11 @@ if step3:
     os.system(create_table_perm)
 
 # Step 4. Update the table with the values taken from the temp table
-header1 = "insert overwrite table bosch.train_numeric select "
+header1 = "insert overwrite table bosch.test_numeric select "
 insertion = """
 regexp_extract(col_value, '^(?:([^,]*),?){CNT}',
 """.strip()
-footer1 = " from bosch.train_numeric_temp;"
+footer1 = " from bosch.test_numeric_temp;"
 for n, c in enumerate(cols, start = 1):
     if n != len(cols):
         c = insertion.replace('CNT', str(n)) + ' 1) ' + c + ', '

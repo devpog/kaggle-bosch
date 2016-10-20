@@ -12,8 +12,8 @@ step3 = True
 step4 = True
 
 db = 'bosch'
-table = 'train_numeric'
-table_temp = 'train_numeric_temp'
+table = 'test_numeric'
+table_temp = 'test_numeric_temp'
 
 # Step 1. Create temp table
 create_table_temp = '''
